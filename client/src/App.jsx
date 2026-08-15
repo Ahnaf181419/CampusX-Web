@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar"
 import Placeholder from "./components/Placeholder"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
+import Register from "./pages/Register"
 
 export default function App() {
   return (
@@ -13,6 +14,8 @@ export default function App() {
         <Route path="/" element={<Home />} />
 
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        
 
         <Route path="/bus" element={<Placeholder icon="bus" name="Bus Tracking" />} />
         <Route path="/notices" element={<Placeholder icon="bell" name="Notices" />} />
