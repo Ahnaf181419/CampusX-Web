@@ -22,6 +22,15 @@ function Navbar() {
           >
             Login
           </Link>
+          
+          <Link
+            to="/register"
+            className="ml-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-background hover:opacity-90"
+          >
+            Register
+          </Link>
+          
+
         </nav>
       </div>
     </header>
