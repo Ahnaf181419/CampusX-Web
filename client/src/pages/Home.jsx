@@ -1,4 +1,5 @@
 import FeatureCard from "../components/FeatureCard"
+import HeroRobot from "../components/HeroRobot"
 
 const features = [
   {
@@ -46,7 +47,7 @@ const features = [
   {
     path: "/tools",
     name: "Academic Tools",
-    description: "Class routine viewer and CGPA calculator.",
+    description: "Academic tools like CGPA calculator.",
     icon: "calculator",
   },
 ]
@@ -58,20 +59,26 @@ export default function Home() {
         <div className="blueprint-grid absolute inset-0" aria-hidden="true"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background" aria-hidden="true"></div>
 
-        <div className="relative mx-auto max-w-6xl px-5 py-20 sm:py-28">
-          <p className="rise-in text-xs font-bold uppercase tracking-[0.28em] text-secondary">
-            Integrated Student Service &amp; Management Platform
-          </p>
+        <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 py-20 sm:py-28 lg:grid-cols-2">
+          <div>
+            <p className="rise-in text-xs font-bold uppercase tracking-[0.28em] text-secondary">
+              Integrated Student Service &amp; Management Platform
+            </p>
 
-          <h1 className="rise-in mt-5 max-w-2xl text-5xl font-black leading-tight tracking-tight sm:text-6xl">
-            Everything on campus, <span className="text-secondary">one place.</span>
-          </h1>
+            <h1 className="rise-in mt-5 max-w-2xl text-5xl font-black leading-tight tracking-tight sm:text-6xl">
+              Everything on campus, <span className="text-secondary">one place.</span>
+            </h1>
 
-          <p className="rise-in mt-6 max-w-xl text-lg text-secondary">
-            Bus tracking, notices, events, room availability and student
-            services — a centralized digital campus assistant, built by
-            students, for students.
-          </p>
+            <p className="rise-in mt-6 max-w-xl text-lg text-secondary">
+              Bus tracking, notices, events, room availability and student
+              services — a centralized digital campus assistant, built by
+              students, for students.
+            </p>
+          </div>
+
+          <div className="rise-in flex justify-center">
+            <HeroRobot />
+          </div>
         </div>
       </section>
 

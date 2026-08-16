@@ -7,6 +7,9 @@ marketplace, academic tools).
 Built with the MERN stack as a university project. The mobile version (Flutter +
 Firebase) lives in a separate repo.
 
+Hero greeting robot: 3D scene by GENKUB, made with [Spline](https://spline.design),
+embedded via its public share URL.
+
 ## Project Structure
 
 ```

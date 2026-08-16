@@ -13,6 +13,9 @@ build/
 # Uploads (Multer images)
 server/uploads/
 
+# Personal notes (not shared with the team)
+mydocs/
+
 # Logs
 *.log
 logs/
