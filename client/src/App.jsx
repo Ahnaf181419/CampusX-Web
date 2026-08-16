@@ -4,6 +4,7 @@ import Placeholder from "./components/Placeholder"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
+import Faq from "./pages/Faq"
 
 export default function App() {
   return (
@@ -21,7 +22,7 @@ export default function App() {
         <Route path="/notices" element={<Placeholder icon="bell" name="Notices" />} />
         <Route path="/events" element={<Placeholder icon="calendar" name="Events" />} />
         <Route path="/rooms" element={<Placeholder icon="door" name="Room Finder" />} />
-        <Route path="/faq" element={<Placeholder icon="question" name="FAQ" />} />
+        <Route path="/faq" element={<Faq />} />
         <Route path="/lost-found" element={<Placeholder icon="package" name="Lost & Found" />} />
         <Route path="/marketplace" element={<Placeholder icon="tag" name="Marketplace" />} />
         <Route path="/tools" element={<Placeholder icon="calculator" name="Academic Tools" />} />
