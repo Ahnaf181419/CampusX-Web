@@ -5,6 +5,7 @@ import Home from "./pages/Home"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Faq from "./pages/Faq"
+import Tools from "./pages/Tools"
 
 export default function App() {
   return (
@@ -25,7 +26,7 @@ export default function App() {
         <Route path="/faq" element={<Faq />} />
         <Route path="/lost-found" element={<Placeholder icon="package" name="Lost & Found" />} />
         <Route path="/marketplace" element={<Placeholder icon="tag" name="Marketplace" />} />
-        <Route path="/tools" element={<Placeholder icon="calculator" name="Academic Tools" />} />
+        <Route path="/tools" element={<Tools />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
