@@ -6,6 +6,7 @@ import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Faq from "./pages/Faq"
 import Tools from "./pages/Tools"
+import Notices from "./pages/Notices"
 
 export default function App() {
   return (
@@ -20,7 +21,7 @@ export default function App() {
         
 
         <Route path="/bus" element={<Placeholder icon="bus" name="Bus Tracking" />} />
-        <Route path="/notices" element={<Placeholder icon="bell" name="Notices" />} />
+        <Route path="/notices" element={<Notices icon="bell" name="Notices" />} />
         <Route path="/events" element={<Placeholder icon="calendar" name="Events" />} />
         <Route path="/rooms" element={<Placeholder icon="door" name="Room Finder" />} />
         <Route path="/faq" element={<Faq />} />
