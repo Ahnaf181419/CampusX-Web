@@ -31,7 +31,7 @@ body {
 }
 
 .rise-in {
-  animation: rise-in 0.55s ease-out both;
+  animation: rise-in 0.55s ease-out backwards;
 }
 
 .blueprint-grid {

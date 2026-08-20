@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Notices = () => {
   return (
     <div className="flex min-h-[calc(100vh-4rem)] w-full justify-center bg-[#F8F9FA] px-5 py-10">
