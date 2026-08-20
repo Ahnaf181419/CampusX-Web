@@ -1,5 +1,3 @@
-import React from "react";
-
 const Register = () => {
   return (
     <div className="flex min-h-[calc(100vh-4rem)] w-screen items-center justify-center py-10">
