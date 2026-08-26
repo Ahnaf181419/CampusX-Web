@@ -1,139 +1,35 @@
 import { useEffect, useState } from "react"
 import { Icon } from "../components/Icons"
 
-const buses = [
-  {
-    id: "padma",
-    busTitle: "Padma Bus",
-    routeDirection: "To University",
-    destination: "towards Bangla School",
-    stops: [
-      { name: "Mirpur 12", minutes: 0 },
-      { name: "Mirpur 11.5", minutes: 3 },
-      { name: "Purobi", minutes: 7 },
-      { name: "Bangla School", minutes: 13 },
-      { name: "Mirpur 11", minutes: 18 },
-      { name: "Mirpur 10", minutes: 23 },
-      { name: "Kazipara", minutes: 27 },
-      { name: "Shewrapara", minutes: 30 },
-      { name: "Taltola", minutes: 35 },
-      { name: "Agargaon", minutes: 38 },
-      { name: "University", minutes: 46 },
-    ],
-  },
-  {
-    id: "meghna",
-    busTitle: "Meghna Bus",
-    routeDirection: "To University",
-    destination: "towards Uttara",
-    stops: [
-      { name: "Proshika Bhaban", minutes: 0 },
-      { name: "Sheyalbari More", minutes: 5 },
-      { name: "Rynkhola", minutes: 10 },
-      { name: "Sony Cinema hall", minutes: 15 },
-      { name: "Mirpur 1", minutes: 22 },
-      { name: "Ansarcamp", minutes: 26 },
-      { name: "Tolarbag", minutes: 28 },
-      { name: "Technical More", minutes: 32 },
-      { name: "Kallyanpur", minutes: 36 },
-      { name: "Shyamoli", minutes: 40 },
-      { name: "Asadgate", minutes: 46 },
-      { name: "Manik Mia Avenue", minutes: 48 },
-      { name: "Rangs Bhaban", minutes: 52 },
-      { name: "University", minutes: 56 },
-    ],
-  },
-  {
-    id: "karnaphuli",
-    busTitle: "Karnaphuli Bus",
-    routeDirection: "To University",
-    destination: "towards Dhanmondi",
-    stops: [
-      { name: "Chashara", minutes: 0 },
-      { name: "Signboad", minutes: 4 },
-      { name: "Jatrabari", minutes: 9 },
-      { name: "Khilgaon", minutes: 14 },
-      { name: "Malibagh", minutes: 19 },
-      { name: "Mogbazar", minutes: 25 },
-      { name: "University", minutes: 44 },
-    ],
-  },
-  {
-    id: "surma",
-    busTitle: "Surma Bus",
-    routeDirection: "To University",
-    destination: "towards Gulshan",
-    stops: [
-      { name: "Gulshan 2", minutes: 0 },
-      { name: "Gulshan 1", minutes: 6 },
-      { name: "Mohakhali", minutes: 14 },
-      { name: "Moghbazar", minutes: 20 },
-      { name: "Malibagh", minutes: 26 },
-      { name: "Kakrail", minutes: 31 },
-      { name: "Shahbagh", minutes: 36 },
-      { name: "University", minutes: 44 },
-    ],
-  },
-  {
-    id: "jamuna",
-    busTitle: "Jamuna Bus",
-    routeDirection: "To University",
-    destination: "towards Mohammadpur",
-    stops: [
-      { name: "Mohammadpur Town", minutes: 0 },
-      { name: "Shyamoli", minutes: 7 },
-      { name: "Asad Gate", minutes: 13 },
-      { name: "Russell Square", minutes: 20 },
-      { name: "Farmgate", minutes: 26 },
-      { name: "Karwan Bazar", minutes: 32 },
-      { name: "University", minutes: 40 },
-    ],
-  },
-  {
-    id: "shitalakshya",
-    busTitle: "Shitalakshya Bus",
-    routeDirection: "To University",
-    destination: "towards Uttara",
-    stops: [
-      { name: "Uttara Sector 7", minutes: 0 },
-      { name: "Azampur", minutes: 8 },
-      { name: "Uttara Center", minutes: 14 },
-      { name: "Airport Road", minutes: 22 },
-      { name: "Banani", minutes: 29 },
-      { name: "Mohakhali", minutes: 36 },
-      { name: "University", minutes: 45 },
-    ],
-  },
-  {
-    id: "buriganga",
-    busTitle: "Buriganga Bus",
-    routeDirection: "To University",
-    destination: "towards Old Dhaka",
-    stops: [
-      { name: "Gulistan", minutes: 0 },
-      { name: "Nayabazar", minutes: 6 },
-      { name: "Zigatola", minutes: 12 },
-      { name: "Dhanmondi 2", minutes: 18 },
-      { name: "Kalabagan", minutes: 24 },
-      { name: "Green Road", minutes: 30 },
-      { name: "University", minutes: 40 },
-    ],
-  },
-]
-
 const cardShadow = "shadow-[0_4px_16px_rgb(22_32_50/0.09)]"
 
 export default function Bus() {
+  const [buses, setBuses] = useState(null)
+  const [loadError, setLoadError] = useState(null)
   const [selectedBusId, setSelectedBusId] = useState("padma")
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [currentStopIndex, setCurrentStopIndex] = useState(0)
-  const [isRunning, setIsRunning] = useState(false)
   const [notifiedStops, setNotifiedStops] = useState({})
   const [arrivalAlert, setArrivalAlert] = useState(null)
 
-  const bus = buses.find((b) => b.id === selectedBusId)
-  const stops = bus.stops
-  const atLastStop = currentStopIndex === stops.length - 1
+  async function fetchBuses() {
+    try {
+      const res = await fetch("/api/buses")
+      if (!res.ok) throw new Error()
+      setBuses(await res.json())
+      setLoadError(null)
+    } catch {
+      setLoadError("Could not load bus data. Is the server running?")
+    }
+  }
+
+  useEffect(() => {
+    const initial = setTimeout(fetchBuses, 0)
+    const id = setInterval(fetchBuses, 5000)
+    return () => {
+      clearTimeout(initial)
+      clearInterval(id)
+    }
+  }, [])
 
   useEffect(() => {
     if (!arrivalAlert) return
@@ -141,26 +37,47 @@ export default function Bus() {
     return () => clearTimeout(id)
   }, [arrivalAlert])
 
+  const bus = buses?.find((b) => b.busId === selectedBusId)
+
+  async function sendAction(action) {
+    try {
+      const res = await fetch(`/api/buses/${selectedBusId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      })
+      if (!res.ok) throw new Error()
+      const updated = await res.json()
+      setBuses((prev) =>
+        prev.map((b) => (b.busId === updated.busId ? updated : b))
+      )
+      setLoadError(null)
+      if (action === "next") {
+        const stop = updated.stops[updated.currentStopIndex]
+        if (notifiedStops[`${updated.busId}-${stop.name}`]) {
+          setArrivalAlert({ busTitle: updated.busTitle, stopName: stop.name })
+        }
+      }
+    } catch {
+      setLoadError("Could not reach the server. Check that it is running.")
+    }
+  }
+
   function handleToggle() {
-    setIsRunning((running) => !running)
+    sendAction(isRunning ? "stop" : "start")
   }
 
   function handleNextStop() {
     if (!isRunning || atLastStop) return
-    setCurrentStopIndex((index) => Math.min(index + 1, stops.length - 1))
-    const stop = stops[currentStopIndex + 1]
-    if (stop && notifiedStops[`${bus.id}-${stop.name}`]) {
-      setArrivalAlert({ busTitle: bus.busTitle, stopName: stop.name })
-    }
+    sendAction("next")
   }
 
   function handleResetRoute() {
-    setCurrentStopIndex(0)
-    setIsRunning(false)
+    sendAction("reset")
   }
 
   function toggleNotify(stopName) {
-    const key = `${bus.id}-${stopName}`
+    const key = `${bus.busId}-${stopName}`
     setNotifiedStops((prev) => {
       const next = { ...prev }
       if (next[key]) {
@@ -171,6 +88,51 @@ export default function Bus() {
       return next
     })
   }
+
+  if (loadError && !buses) {
+    return (
+      <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
+        <div className="blueprint-grid absolute inset-0" aria-hidden="true"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background" aria-hidden="true"></div>
+
+        <div className="relative mx-auto flex min-h-[60vh] max-w-3xl flex-col items-center justify-center gap-4 px-5 py-16 text-center">
+          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white">
+            <Icon name="bus" className="h-7 w-7 text-primary" />
+          </span>
+          <p className="text-lg font-bold">Could not load bus data</p>
+          <p className="max-w-sm text-sm text-secondary">{loadError}</p>
+          <button
+            type="button"
+            onClick={fetchBuses}
+            className="mt-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white transition-colors duration-200 hover:opacity-90"
+          >
+            Retry
+          </button>
+        </div>
+      </main>
+    )
+  }
+
+  if (!bus) {
+    return (
+      <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
+        <div className="blueprint-grid absolute inset-0" aria-hidden="true"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background" aria-hidden="true"></div>
+
+        <div className="relative mx-auto flex min-h-[60vh] max-w-3xl flex-col items-center justify-center gap-4 px-5 py-16">
+          <span className="flex h-14 w-14 animate-pulse items-center justify-center rounded-2xl bg-white">
+            <Icon name="bus" className="h-7 w-7 text-primary" />
+          </span>
+          <p className="text-sm font-semibold text-secondary">Loading buses…</p>
+        </div>
+      </main>
+    )
+  }
+
+  const stops = bus.stops
+  const currentStopIndex = bus.currentStopIndex
+  const isRunning = bus.isRunning
+  const atLastStop = currentStopIndex === stops.length - 1
 
   return (
     <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
@@ -189,6 +151,12 @@ export default function Bus() {
         <p className="rise-in mt-4 max-w-xl text-lg text-secondary">
           Live progress of every campus bus, with arrival times for your stop.
         </p>
+
+        {loadError && (
+          <p className="rise-in mt-4 rounded-xl border border-muted bg-white px-4 py-3 text-sm font-semibold text-secondary">
+            {loadError}
+          </p>
+        )}
 
         <div
           className="rise-in relative z-30 mt-10"
@@ -237,18 +205,16 @@ export default function Bus() {
               >
                 {buses.map((b) => (
                   <button
-                    key={b.id}
+                    key={b.busId}
                     type="button"
                     role="option"
-                    aria-selected={b.id === selectedBusId}
+                    aria-selected={b.busId === selectedBusId}
                     onClick={() => {
-                      setSelectedBusId(b.id)
-                      setCurrentStopIndex(0)
-                      setIsRunning(false)
+                      setSelectedBusId(b.busId)
                       setIsDropdownOpen(false)
                     }}
                     className={`flex w-full items-center justify-between gap-3 border-b border-muted/60 px-4 py-3 text-left last:border-b-0 ${
-                      b.id === selectedBusId
+                      b.busId === selectedBusId
                         ? "bg-surface"
                         : "hover:bg-surface/60"
                     }`}
@@ -256,13 +222,13 @@ export default function Bus() {
                     <span className="min-w-0">
                       <span
                         className={`block truncate text-sm font-bold ${
-                          b.id === selectedBusId ? "text-primary" : ""
+                          b.busId === selectedBusId ? "text-primary" : ""
                         }`}
                       >
                         {b.busTitle}
                       </span>
                     </span>
-                    {b.id === selectedBusId && (
+                    {b.busId === selectedBusId && (
                       <Icon name="check" className="h-4 w-4 shrink-0 text-primary" />
                     )}
                   </button>
@@ -390,7 +356,7 @@ export default function Bus() {
         <div className={`rise-in overflow-hidden rounded-lg bg-white ${cardShadow}`}>
           {stops.map((stop, index) => {
             const isPassed = index <= currentStopIndex
-            const isNotified = notifiedStops[`${bus.id}-${stop.name}`]
+            const isNotified = notifiedStops[`${bus.busId}-${stop.name}`]
 
             return (
               <div
@@ -439,7 +405,7 @@ export default function Bus() {
         </div>
 
         <p className="mt-4 text-center text-xs text-muted">
-          Demo mode — the bus moves via Admin Control
+          Live data — bus positions sync from the database every 5 seconds
         </p>
       </div>
 

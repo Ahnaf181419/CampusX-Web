@@ -1,5 +1,3 @@
-import React from 'react';
-
 const EmergencyBanner = ({ title, date, details }) => {
   return (
     <div className="mb-6 flex flex-col rounded-xl border-2 border-[#E03C4B] bg-red-50 p-5 shadow-sm">
