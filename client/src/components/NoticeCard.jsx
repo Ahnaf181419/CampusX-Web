@@ -1,4 +1,3 @@
-import React from 'react';
 import { RiMailLine, RiArrowDropDownLine } from "react-icons/ri";
 
 const NoticeCard = ({ notice, isChecked, onToggle, onClick }) => {

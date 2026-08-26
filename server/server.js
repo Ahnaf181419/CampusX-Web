@@ -3,6 +3,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
+const busRoutes = require("./routes/busRoutes");
+
 const app = express();
 
 const PORT = process.env.PORT || 5000;
@@ -19,9 +21,14 @@ app.get("/", (req, res) => {
   });
 });
 
+// Feature routes
+app.use("/api/buses", busRoutes);
+
 // Connect to MongoDB
+// family: 4 forces IPv4 — DNS64/NAT64 networks return IPv6 addresses
+// that break the driver's TLS handshake
 mongoose
-  .connect(MONGO_URI)
+  .connect(MONGO_URI, { family: 4 })
   .then(() => {
     console.log("MongoDB connected successfully");
 

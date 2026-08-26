@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import NoticeCard from '../components/NoticeCard';
-import EmergencyBanner from '../components/EmergencyBanner';
 
 // Mock database to simulate backend
 const mockNotices = [
