@@ -1,9 +1,16 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-require("dotenv").config();
+const session = require("express-session");
+const passport = require("passport");
 
+// Route imports
 const busRoutes = require("./routes/busRoutes");
+const authRoutes = require("./routes/auth"); // Make sure this file exists from Step 4
+
+// Model imports
+const User = require("./models/User"); // Make sure this file exists from Step 2
 
 const app = express();
 
@@ -11,8 +18,37 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
 // Middleware
-app.use(cors());
+// 1. CORS configuration updated to allow cookie sharing with React
+app.use(
+  cors({
+    origin: "http://localhost:5173", // your React frontend port
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// 2. Session setup
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "campusx_secret_key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false, // Set to true in production with HTTPS
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    },
+  })
+);
+
+// 3. Passport setup
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Test route
 app.get("/", (req, res) => {
@@ -23,6 +59,7 @@ app.get("/", (req, res) => {
 
 // Feature routes
 app.use("/api/buses", busRoutes);
+app.use("/api/auth", authRoutes); // New authentication routes
 
 // Connect to MongoDB
 // family: 4 forces IPv4 — DNS64/NAT64 networks return IPv6 addresses
