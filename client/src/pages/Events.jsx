@@ -93,7 +93,7 @@ export default function Events() {
         aria-hidden="true"
       ></div>
 
-      <div className="relative mx-auto max-w-3xl px-5 py-16">
+      <div className="relative mx-auto max-w-6xl px-5 py-16">
         <p className="rise-in text-xs font-bold uppercase tracking-[0.28em] text-secondary">
           Campus Life
         </p>
@@ -124,7 +124,7 @@ export default function Events() {
           ))}
         </div>
 
-        <div className="mt-8 space-y-4">
+        <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-3">
           {filteredEvents.length > 0 ? (
             filteredEvents.map((event, index) => (
               <div
