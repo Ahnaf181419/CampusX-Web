@@ -1,0 +1,268 @@
+import { useState } from "react"
+import { Icon } from "../components/Icons"
+
+const mockEvents = [
+  {
+    id: 1,
+    title: "Annual Tech Fest 2026",
+    date: "May 10, 2026",
+    time: "10:00 AM – 6:00 PM",
+    location: "Main Auditorium",
+    description:
+      "The biggest tech event of the year featuring workshops, hackathons, guest speakers from top tech companies, and hands-on demo booths. Open to all departments.",
+    status: "Ongoing",
+    link: "#",
+  },
+  {
+    id: 2,
+    title: "Career Fair – Spring Semester",
+    date: "May 5, 2026",
+    time: "9:00 AM – 3:00 PM",
+    location: "Convention Hall",
+    description:
+      "Meet recruiters from 30+ companies offering internships and full-time roles. Bring your resume and portfolio.",
+    status: "Ongoing",
+    link: "#",
+  },
+  {
+    id: 3,
+    title: "Blood Donation Drive",
+    date: "Apr 28, 2026",
+    time: "11:00 AM – 4:00 PM",
+    location: "Student Center, Room 204",
+    description:
+      "Organized by the Red Cross Society. All donors receive a certificate and a free health check-up.",
+    status: "Completed",
+    link: null,
+  },
+  {
+    id: 4,
+    title: "Workshop: Intro to Machine Learning",
+    date: "Apr 20, 2026",
+    time: "2:00 PM – 5:00 PM",
+    location: "CS Building, Lab 3",
+    description:
+      "A beginner-friendly workshop covering the basics of ML, regression models, and hands-on Python exercises.",
+    status: "Completed",
+    link: null,
+  },
+  {
+    id: 5,
+    title: "Inter-Department Cricket Tournament",
+    date: "May 15, 2026",
+    time: "3:00 PM – 7:00 PM",
+    location: "University Sports Complex",
+    description:
+      "Round-robin matches between department teams. Cheer for your department and enjoy the finals with prizes.",
+    status: "Upcoming",
+    link: "#",
+  },
+  {
+    id: 6,
+    title: "Seminar: Cloud Computing & DevOps",
+    date: "May 20, 2026",
+    time: "10:00 AM – 12:00 PM",
+    location: "Seminar Hall B",
+    description:
+      "Industry experts from AWS and Google Cloud discuss modern cloud architectures and CI/CD pipelines.",
+    status: "Upcoming",
+    link: "#",
+  },
+]
+
+const statusStyle = {
+  Ongoing: "bg-primary text-white",
+  Completed: "bg-surface-alt text-secondary",
+  Upcoming: "bg-priority-mid text-white",
+}
+
+export default function Events() {
+  const [activeFilter, setActiveFilter] = useState("All")
+  const [selectedEvent, setSelectedEvent] = useState(null)
+
+  const filteredEvents = mockEvents.filter((event) => {
+    if (activeFilter === "All") return true
+    return event.status === activeFilter
+  })
+
+  return (
+    <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
+      <div className="blueprint-grid absolute inset-0" aria-hidden="true"></div>
+      <div
+        className="absolute inset-0 bg-gradient-to-b from-transparent to-background"
+        aria-hidden="true"
+      ></div>
+
+      <div className="relative mx-auto max-w-3xl px-5 py-16">
+        <p className="rise-in text-xs font-bold uppercase tracking-[0.28em] text-secondary">
+          Campus Life
+        </p>
+
+        <h1 className="rise-in mt-4 text-4xl font-black tracking-tight sm:text-5xl">
+          Stay in the loop.
+        </h1>
+
+        <p className="rise-in mt-4 max-w-xl text-lg text-secondary">
+          Ongoing, upcoming and past campus events — register, attend and never
+          miss out.
+        </p>
+
+        <div className="rise-in mt-8 flex gap-3">
+          {["All", "Ongoing", "Upcoming", "Completed"].map((filter) => (
+            <button
+              key={filter}
+              type="button"
+              onClick={() => setActiveFilter(filter)}
+              className={`rounded-full px-6 py-2 text-sm font-medium transition-all ${
+                activeFilter === filter
+                  ? "bg-primary text-white"
+                  : "border border-muted bg-white text-secondary hover:bg-surface"
+              }`}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-8 space-y-4">
+          {filteredEvents.length > 0 ? (
+            filteredEvents.map((event, index) => (
+              <div
+                key={event.id}
+                className={`rise-in overflow-hidden rounded-2xl border border-muted/50 bg-white shadow-[0_4px_16px_rgb(22_32_50/0.09)]`}
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <div className="flex items-start gap-4 px-5 py-4">
+                  <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-surface">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-secondary">
+                      {event.date.split(" ")[0]}
+                    </span>
+                    <span className="text-lg font-black leading-none text-primary">
+                      {event.date.split(" ")[1].replace(",", "")}
+                    </span>
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-3">
+                      <h2 className="text-base font-bold">{event.title}</h2>
+                      <span
+                        className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${statusStyle[event.status]}`}
+                      >
+                        {event.status}
+                      </span>
+                    </div>
+
+                    <div className="mt-1.5 flex flex-wrap items-center gap-3 text-xs text-secondary">
+                      <span className="flex items-center gap-1">
+                        <Icon name="clock" className="h-3.5 w-3.5" />
+                        {event.time}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Icon name="mapPin" className="h-3.5 w-3.5" />
+                        {event.location}
+                      </span>
+                    </div>
+
+                    <p className="mt-2.5 line-clamp-2 text-sm leading-relaxed text-secondary">
+                      {event.description}
+                    </p>
+
+                    <div className="mt-3 flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedEvent(event)}
+                        className="rounded-lg bg-surface px-4 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-surface-alt"
+                      >
+                        View Details
+                      </button>
+                      {event.link && (
+                        <a
+                          href={event.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                        >
+                          Register
+                          <Icon name="arrowRight" className="h-3.5 w-3.5" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="mt-10 text-center text-secondary">
+              No events in this category.
+            </div>
+          )}
+        </div>
+      </div>
+
+      {selectedEvent && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm"
+          onClick={() => setSelectedEvent(null)}
+        >
+          <div
+            className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between">
+              <h2 className="text-[19px] font-semibold text-primary">
+                {selectedEvent.title}
+              </h2>
+              <span
+                className={`rounded-full px-4 py-1 text-xs font-semibold ${statusStyle[selectedEvent.status]}`}
+              >
+                {selectedEvent.status}
+              </span>
+            </div>
+
+            <div className="mt-2 flex flex-wrap gap-3 text-sm text-secondary">
+              <span className="flex items-center gap-1">
+                <Icon name="calendar" className="h-4 w-4" />
+                {selectedEvent.date}
+              </span>
+              <span className="flex items-center gap-1">
+                <Icon name="clock" className="h-4 w-4" />
+                {selectedEvent.time}
+              </span>
+              <span className="flex items-center gap-1">
+                <Icon name="mapPin" className="h-4 w-4" />
+                {selectedEvent.location}
+              </span>
+            </div>
+
+            <hr className="my-4 border-muted/50" />
+
+            <p className="mb-6 text-[15px] leading-relaxed text-secondary">
+              {selectedEvent.description}
+            </p>
+
+            <div className="flex gap-3">
+              {selectedEvent.link && (
+                <a
+                  href={selectedEvent.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
+                >
+                  Register
+                  <Icon name="arrowRight" className="h-4 w-4" />
+                </a>
+              )}
+              <button
+                type="button"
+                onClick={() => setSelectedEvent(null)}
+                className="flex-1 rounded-xl border border-muted py-3 text-sm font-medium text-secondary transition-colors hover:bg-surface"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </main>
+  )
+}
