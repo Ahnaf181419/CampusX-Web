@@ -11,7 +11,7 @@ const eventSchema = new mongoose.Schema({
   },
   time: {
     type: String,
-    required: true,
+    default: null,
   },
   location: {
     type: String,
@@ -24,7 +24,7 @@ const eventSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ["Ongoing", "Completed", "Upcoming"],
-    required: true,
+    default: "Upcoming",
   },
   link: {
     type: String,

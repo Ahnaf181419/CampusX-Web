@@ -13,6 +13,25 @@ router.get("/", async (req, res) => {
   }
 });
 
+// POST /api/events — create a new event
+router.post("/", async (req, res) => {
+  try {
+    const { title, date, location, description } = req.body;
+
+    if (!title || !date || !location || !description) {
+      return res.status(400).json({ error: "Title, date, location, and description are required" });
+    }
+
+    const maxOrder = await Event.findOne().sort({ order: -1 }).select("order");
+    const order = maxOrder ? maxOrder.order + 1 : 1;
+
+    const event = await Event.create({ title, date, location, description, order });
+    res.status(201).json(event);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create event" });
+  }
+});
+
 // PATCH /api/events/:eventId — update an event's status
 // body: { action: "complete" | "start" | "upcoming" }
 router.patch("/:eventId", async (req, res) => {
@@ -38,6 +57,19 @@ router.patch("/:eventId", async (req, res) => {
     res.json(updatedEvent);
   } catch (error) {
     res.status(500).json({ error: "Failed to update event" });
+  }
+});
+
+// DELETE /api/events/:eventId — delete an event
+router.delete("/:eventId", async (req, res) => {
+  try {
+    const event = await Event.findByIdAndDelete(req.params.eventId);
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+    res.json({ message: "Event deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete event" });
   }
 });
 

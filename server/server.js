@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-require("dotenv").config();
+require("dotenv").config({ override: true });
 
 const busRoutes = require("./routes/busRoutes");
 const eventRoutes = require("./routes/eventRoutes");
