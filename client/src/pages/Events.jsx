@@ -1,74 +1,5 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Icon } from "../components/Icons"
-
-const mockEvents = [
-  {
-    id: 1,
-    title: "Annual Tech Fest 2026",
-    date: "May 10, 2026",
-    time: "10:00 AM – 6:00 PM",
-    location: "Main Auditorium",
-    description:
-      "The biggest tech event of the year featuring workshops, hackathons, guest speakers from top tech companies, and hands-on demo booths. Open to all departments.",
-    status: "Ongoing",
-    link: "#",
-  },
-  {
-    id: 2,
-    title: "Career Fair – Spring Semester",
-    date: "May 5, 2026",
-    time: "9:00 AM – 3:00 PM",
-    location: "Convention Hall",
-    description:
-      "Meet recruiters from 30+ companies offering internships and full-time roles. Bring your resume and portfolio.",
-    status: "Ongoing",
-    link: "#",
-  },
-  {
-    id: 3,
-    title: "Blood Donation Drive",
-    date: "Apr 28, 2026",
-    time: "11:00 AM – 4:00 PM",
-    location: "Student Center, Room 204",
-    description:
-      "Organized by the Red Cross Society. All donors receive a certificate and a free health check-up.",
-    status: "Completed",
-    link: null,
-  },
-  {
-    id: 4,
-    title: "Workshop: Intro to Machine Learning",
-    date: "Apr 20, 2026",
-    time: "2:00 PM – 5:00 PM",
-    location: "CS Building, Lab 3",
-    description:
-      "A beginner-friendly workshop covering the basics of ML, regression models, and hands-on Python exercises.",
-    status: "Completed",
-    link: null,
-  },
-  {
-    id: 5,
-    title: "Inter-Department Cricket Tournament",
-    date: "May 15, 2026",
-    time: "3:00 PM – 7:00 PM",
-    location: "University Sports Complex",
-    description:
-      "Round-robin matches between department teams. Cheer for your department and enjoy the finals with prizes.",
-    status: "Upcoming",
-    link: "#",
-  },
-  {
-    id: 6,
-    title: "Seminar: Cloud Computing & DevOps",
-    date: "May 20, 2026",
-    time: "10:00 AM – 12:00 PM",
-    location: "Seminar Hall B",
-    description:
-      "Industry experts from AWS and Google Cloud discuss modern cloud architectures and CI/CD pipelines.",
-    status: "Upcoming",
-    link: "#",
-  },
-]
 
 const statusStyle = {
   Ongoing: "bg-primary text-white",
@@ -77,10 +8,27 @@ const statusStyle = {
 }
 
 export default function Events() {
+  const [events, setEvents] = useState([])
   const [activeFilter, setActiveFilter] = useState("All")
   const [selectedEvent, setSelectedEvent] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  const filteredEvents = mockEvents.filter((event) => {
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const res = await fetch("/api/events")
+        const data = await res.json()
+        setEvents(data)
+      } catch (error) {
+        console.error("Failed to fetch events:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchEvents()
+  }, [])
+
+  const filteredEvents = events.filter((event) => {
     if (activeFilter === "All") return true
     return event.status === activeFilter
   })
@@ -124,79 +72,83 @@ export default function Events() {
           ))}
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-3">
-          {filteredEvents.length > 0 ? (
-            filteredEvents.map((event, index) => (
-              <div
-                key={event.id}
-                className={`rise-in overflow-hidden rounded-2xl border border-muted/50 bg-white shadow-[0_4px_16px_rgb(22_32_50/0.09)]`}
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <div className="flex items-start gap-4 px-5 py-4">
-                  <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-surface">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-secondary">
-                      {event.date.split(" ")[0]}
-                    </span>
-                    <span className="text-lg font-black leading-none text-primary">
-                      {event.date.split(" ")[1].replace(",", "")}
-                    </span>
-                  </div>
-
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-3">
-                      <h2 className="text-base font-bold">{event.title}</h2>
-                      <span
-                        className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${statusStyle[event.status]}`}
-                      >
-                        {event.status}
+        {loading ? (
+          <div className="mt-10 text-center text-secondary">Loading events...</div>
+        ) : (
+          <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-3">
+            {filteredEvents.length > 0 ? (
+              filteredEvents.map((event, index) => (
+                <div
+                  key={event._id}
+                  className={`rise-in overflow-hidden rounded-2xl border border-muted/50 bg-white shadow-[0_4px_16px_rgb(22_32_50/0.09)]`}
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  <div className="flex items-start gap-4 px-5 py-4">
+                    <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-surface">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-secondary">
+                        {event.date.split(" ")[0]}
+                      </span>
+                      <span className="text-lg font-black leading-none text-primary">
+                        {event.date.split(" ")[1].replace(",", "")}
                       </span>
                     </div>
 
-                    <div className="mt-1.5 flex flex-wrap items-center gap-3 text-xs text-secondary">
-                      <span className="flex items-center gap-1">
-                        <Icon name="clock" className="h-3.5 w-3.5" />
-                        {event.time}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Icon name="mapPin" className="h-3.5 w-3.5" />
-                        {event.location}
-                      </span>
-                    </div>
-
-                    <p className="mt-2.5 line-clamp-2 text-sm leading-relaxed text-secondary">
-                      {event.description}
-                    </p>
-
-                    <div className="mt-3 flex items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedEvent(event)}
-                        className="rounded-lg bg-surface px-4 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-surface-alt"
-                      >
-                        View Details
-                      </button>
-                      {event.link && (
-                        <a
-                          href={event.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-3">
+                        <h2 className="text-base font-bold">{event.title}</h2>
+                        <span
+                          className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${statusStyle[event.status]}`}
                         >
-                          Register
-                          <Icon name="arrowRight" className="h-3.5 w-3.5" />
-                        </a>
-                      )}
+                          {event.status}
+                        </span>
+                      </div>
+
+                      <div className="mt-1.5 flex flex-wrap items-center gap-3 text-xs text-secondary">
+                        <span className="flex items-center gap-1">
+                          <Icon name="clock" className="h-3.5 w-3.5" />
+                          {event.time}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Icon name="mapPin" className="h-3.5 w-3.5" />
+                          {event.location}
+                        </span>
+                      </div>
+
+                      <p className="mt-2.5 line-clamp-2 text-sm leading-relaxed text-secondary">
+                        {event.description}
+                      </p>
+
+                      <div className="mt-3 flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedEvent(event)}
+                          className="rounded-lg bg-surface px-4 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-surface-alt"
+                        >
+                          View Details
+                        </button>
+                        {event.link && (
+                          <a
+                            href={event.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                          >
+                            Register
+                            <Icon name="arrowRight" className="h-3.5 w-3.5" />
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="mt-10 text-center text-secondary">
+                No events in this category.
               </div>
-            ))
-          ) : (
-            <div className="mt-10 text-center text-secondary">
-              No events in this category.
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
 
       {selectedEvent && (

@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const busRoutes = require("./routes/busRoutes");
+const eventRoutes = require("./routes/eventRoutes");
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 
 // Feature routes
 app.use("/api/buses", busRoutes);
+app.use("/api/events", eventRoutes);
 
 // Connect to MongoDB
 // family: 4 forces IPv4 — DNS64/NAT64 networks return IPv6 addresses
