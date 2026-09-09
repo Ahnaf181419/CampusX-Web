@@ -19,6 +19,8 @@ router.post("/register", async (req, res, next) => {
         user: {
           id: registeredUser._id,
           fullName: registeredUser.fullName,
+          studentId: registeredUser.studentId,
+          department: registeredUser.department,
           email: registeredUser.email,
           role: registeredUser.role,
         },
@@ -44,6 +46,8 @@ router.post("/login", (req, res, next) => {
         user: {
           id: user._id,
           fullName: user.fullName,
+          studentId: user.studentId,
+          department: user.department,
           email: user.email,
           role: user.role,
         },
@@ -52,6 +56,7 @@ router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
+
 // GET: /api/auth/me (Check login status on page refresh)
 router.get("/me", (req, res) => {
   if (req.isAuthenticated()) {
@@ -59,6 +64,7 @@ router.get("/me", (req, res) => {
   }
   return res.status(401).json({ user: null });
 });
+
 
 // POST: /api/auth/logout
 router.post("/logout", (req, res, next) => {

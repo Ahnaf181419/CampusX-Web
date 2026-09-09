@@ -2,7 +2,7 @@ const express = require("express");
 const Event = require("../models/Event");
 
 const router = express.Router();
-
+const { isAdmin } = require("../middleware/authMiddleware");
 // GET /api/events — list every event sorted by date
 router.get("/", async (req, res) => {
   try {
@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
 });
 
 // POST /api/events — create a new event
-router.post("/", async (req, res) => {
+router.post("/", isAdmin, async (req, res) => {
   try {
     const { title, date, location, description } = req.body;
 
@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
 
 // PATCH /api/events/:eventId — update an event's status
 // body: { action: "complete" | "start" | "upcoming" }
-router.patch("/:eventId", async (req, res) => {
+router.patch("/:eventId",  isAdmin, async (req, res) => {
   try {
     const { action } = req.body;
     const event = await Event.findOne({ _id: req.params.eventId });
@@ -61,7 +61,7 @@ router.patch("/:eventId", async (req, res) => {
 });
 
 // DELETE /api/events/:eventId — delete an event
-router.delete("/:eventId", async (req, res) => {
+router.delete("/:eventId",  isAdmin, async (req, res) => {
   try {
     const event = await Event.findByIdAndDelete(req.params.eventId);
     if (!event) {

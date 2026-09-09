@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,13 +20,16 @@ const Login = () => {
       const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // Required for session cookie persistence
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
+      console.log("Login response:", data);
       if (!res.ok) throw new Error(data.error || "Login failed");
 
+
+      setUser(data.user);
       navigate("/");
     } catch (err) {
       setError(err.message);

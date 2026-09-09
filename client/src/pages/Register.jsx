@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ const Register = () => {
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,13 +29,14 @@ const Register = () => {
       const res = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // Required for session cookie persistence
+        credentials: "include",
         body: JSON.stringify(formData),
       });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Registration failed");
 
+      setUser(data.user);
       navigate("/");
     } catch (err) {
       setError(err.message);

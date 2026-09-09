@@ -10,6 +10,7 @@ import Bus from "./pages/Bus"
 import Notices from "./pages/Notices"
 import Events from "./pages/Events"
 import Rooms from "./pages/Rooms"
+import Profile from "./pages/Profile"
 
 export default function App() {
   return (
@@ -22,7 +23,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         
-
+        <Route path="/profile" element={<Profile />} />
         <Route path="/bus" element={<Bus />} />
         <Route path="/notices" element={<Notices icon="bell" name="Notices" />} />
         <Route path="/events" element={<Events />} />
