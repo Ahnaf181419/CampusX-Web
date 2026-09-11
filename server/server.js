@@ -9,7 +9,7 @@ const passport = require("passport");
 const busRoutes = require("./routes/busRoutes");
 const eventRoutes = require("./routes/eventRoutes");
 const authRoutes = require("./routes/auth"); // Make sure this file exists from Step 4
-
+const adminRoutes = require("./routes/adminRoutes");
 // Model imports
 const User = require("./models/User"); // Make sure this file exists from Step 2
 
@@ -62,7 +62,7 @@ app.get("/", (req, res) => {
 app.use("/api/buses", busRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/auth", authRoutes); // New authentication routes
-
+app.use("/api/admin", adminRoutes);
 // Connect to MongoDB
 // family: 4 forces IPv4 — DNS64/NAT64 networks return IPv6 addresses
 // that break the driver's TLS handshake
