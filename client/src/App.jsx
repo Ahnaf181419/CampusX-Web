@@ -11,6 +11,7 @@ import Notices from "./pages/Notices";
 import Events from "./pages/Events";
 import Rooms from "./pages/Rooms";
 import Profile from "./pages/Profile";
+import LostFound from "./pages/LostFound";
 import AdminRoute from "./components/AdminRoute";
 import AdminDashboard from "./pages/AdminDashboard";
 
@@ -34,10 +35,7 @@ export default function App() {
         <Route path="/events" element={<Events />} />
         <Route path="/rooms" element={<Rooms />} />
         <Route path="/faq" element={<Faq />} />
-        <Route
-          path="/lost-found"
-          element={<Placeholder icon="package" name="Lost & Found" />}
-        />
+        <Route path="/lost-found" element={<LostFound />} />
         <Route
           path="/marketplace"
           element={<Placeholder icon="tag" name="Marketplace" />}
