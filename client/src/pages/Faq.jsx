@@ -1,56 +1,29 @@
 import { useState } from "react"
 import { Icon } from "../components/Icons"
+import { faqs, categories } from "../data/faqs"
 
-const faqs = [
-  {
-    question: "What is CampusX?",
-    answer:
-      "CampusX is a centralized platform that brings student services together: bus tracking, notices, events, room availability, lost & found, marketplace and academic tools.",
-  },
-  {
-    question: "How do I track my campus bus?",
-    answer:
-      "Open Bus Tracking from the dashboard. It shows the live location of each bus, the stops on its route and an estimated arrival time for your stop.",
-  },
-  {
-    question: "How will I know when a new notice is posted?",
-    answer:
-      "Every notice appears in the Notices section the moment it is published. Emergency alerts are highlighted at the top so they can never be missed.",
-  },
-  {
-    question: "Where can I find an empty classroom for group study?",
-    answer:
-      "Use Room Finder. Pick your building and a free time slot, and it lists every classroom and lab that is empty during that period.",
-  },
-  {
-    question: "I lost my student ID card. What should I do?",
-    answer:
-      "Check Lost & Found first, someone may have already reported it. If not, post a report with a description, and you will be contacted when it is found.",
-  },
-  {
-    question: "Can I sell my old books on CampusX?",
-    answer:
-      "Yes. Marketplace lets you list books, calculators and other items for other students of your campus to buy safely.",
-  },
-  {
-    question: "How do I check my class routine?",
-    answer:
-      "Academic Tools includes a routine viewer that shows your weekly class schedule, plus a CGPA calculator for tracking your results.",
-  },
-  {
-    question: "Do I need an account to use CampusX?",
-    answer:
-      "Browsing services such as notices and FAQ is open to everyone. An account is needed for personal features like posting in Lost & Found or Marketplace.",
-  },
-  {
-    question: "Is CampusX available on mobile?",
-    answer:
-      "Yes. Every page is built with a responsive layout, so the full platform works on phones, tablets and desktops.",
-  },
-]
+function renderAnswer(answer) {
+  return answer.split("**").map((part, i) =>
+    i % 2 === 1 ? <strong key={i}>{part}</strong> : <span key={i}>{part}</span>
+  )
+}
 
 export default function Faq() {
-  const [open, setOpen] = useState(null)
+  const [category, setCategory] = useState("all")
+  const [openSet, setOpenSet] = useState(new Set())
+
+  const visible = faqs.filter(
+    (faq) => category === "all" || faq.category === category
+  )
+
+  function toggle(question) {
+    setOpenSet((prev) => {
+      const next = new Set(prev)
+      if (next.has(question)) next.delete(question)
+      else next.add(question)
+      return next
+    })
+  }
 
   return (
     <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
@@ -70,31 +43,89 @@ export default function Faq() {
           Everything students usually ask about CampusX and its services.
         </p>
 
-        <div className="mt-12 divide-y divide-muted/50 border-y border-muted/50">
-          {faqs.map((faq, index) => (
+        <div className="rise-in mt-10 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setCategory("all")}
+            className={`rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] transition-colors ${
+              category === "all"
+                ? "border-primary bg-primary text-background"
+                : "border-muted/60 bg-background text-secondary hover:bg-surface"
+            }`}
+          >
+            All
+          </button>
+
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              type="button"
+              onClick={() => setCategory(cat.id)}
+              className={`rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] transition-colors ${
+                category === cat.id
+                  ? "border-primary bg-primary text-background"
+                  : "border-muted/60 bg-background text-secondary hover:bg-surface"
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-6 divide-y divide-muted/50 border-y border-muted/50">
+          {visible.map((faq) => (
             <div key={faq.question} className="rise-in">
               <button
                 type="button"
-                onClick={() => setOpen(open === index ? null : index)}
+                aria-expanded={openSet.has(faq.question)}
+                onClick={() => toggle(faq.question)}
                 className="flex w-full items-center justify-between gap-4 py-5 text-left hover:opacity-80"
               >
                 <span className="text-base font-semibold">{faq.question}</span>
                 <Icon
                   name="chevronDown"
                   className={`h-5 w-5 shrink-0 text-secondary transition-transform duration-300 ${
-                    open === index ? "rotate-180" : ""
+                    openSet.has(faq.question) ? "rotate-180" : ""
                   }`}
                 />
               </button>
 
-              {open === index && (
+              {openSet.has(faq.question) && (
                 <p className="pb-5 text-sm leading-relaxed text-secondary">
-                  {faq.answer}
+                  {renderAnswer(faq.answer)}
                 </p>
               )}
             </div>
           ))}
+
+          {visible.length === 0 && (
+            <p className="py-8 text-center text-sm italic text-secondary">
+              No questions in this category yet.
+            </p>
+          )}
         </div>
+
+        <section className="rise-in mt-12 rounded-2xl border border-muted/70 bg-surface px-6 py-6">
+          <h2 className="text-sm font-bold uppercase tracking-[0.22em] text-secondary">
+            Still need help?
+          </h2>
+
+          <p className="mt-2 max-w-lg text-sm leading-relaxed text-secondary">
+            Could not find your answer? Reach the CampusX team directly and we
+            will get back to you.
+          </p>
+
+          <div className="mt-4">
+            <a
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=support@campusx.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block rounded-full border border-muted/60 bg-background px-4 py-2 text-xs font-semibold text-primary hover:bg-surface"
+            >
+              support@campusx.dev
+            </a>
+          </div>
+        </section>
       </div>
     </main>
   )
