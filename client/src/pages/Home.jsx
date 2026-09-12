@@ -1,5 +1,7 @@
-import FeatureCard from "../components/FeatureCard"
-import HeroRobot from "../components/HeroRobot"
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import FeatureCard from "../components/FeatureCard";
+import HeroRobot from "../components/HeroRobot";
 
 const features = [
   {
@@ -53,6 +55,15 @@ const features = [
 ]
 
 export default function Home() {
+  const { user } = useContext(AuthContext);
+
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
+  const firstName =
+    user?.fullName?.trim().split(/\s+/)[0] ||
+    user?.email?.split("@")[0] ||
+    "there";
+
   return (
     <main>
       <section className="relative overflow-hidden border-b border-muted/50">
@@ -60,21 +71,51 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background" aria-hidden="true"></div>
 
         <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 py-20 sm:py-28 lg:grid-cols-2">
-          <div>
-            <p className="rise-in text-xs font-bold uppercase tracking-[0.28em] text-secondary">
-              Integrated Student Service &amp; Management Platform
-            </p>
+          {user ? (
+            <div>
+              <p className="rise-in text-xs font-bold uppercase tracking-[0.28em] text-secondary">
+                Good {greeting}
+              </p>
 
-            <h1 className="rise-in mt-5 max-w-2xl text-5xl font-black leading-tight tracking-tight sm:text-6xl">
-              Everything on campus, <span className="text-secondary">one place.</span>
-            </h1>
+              <h1 className="rise-in mt-5 max-w-2xl text-5xl font-black leading-tight tracking-tight sm:text-6xl">
+                Welcome, {firstName}.
+              </h1>
 
-            <p className="rise-in mt-6 max-w-xl text-lg text-secondary">
-              Bus tracking, notices, events, room availability and student
-              services — a centralized digital campus assistant, built by
-              students, for students.
-            </p>
-          </div>
+              {user.department && (
+                <p className="rise-in mt-4 text-sm font-bold uppercase tracking-[0.2em] text-secondary">
+                  {user.department}
+                  {user.role === "Admin" ? " · Admin" : ""}
+                </p>
+              )}
+
+              <p className="rise-in mt-6 max-w-xl text-lg text-secondary">
+                Bus tracking, notices, events, room availability and student
+                services — your centralized digital campus assistant, synced
+                to your account.
+              </p>
+
+              <p className="rise-in mt-3 max-w-xl text-sm text-secondary/80">
+                Jump in from the services below — your session stays active
+                across every page.
+              </p>
+            </div>
+          ) : (
+            <div>
+              <p className="rise-in text-xs font-bold uppercase tracking-[0.28em] text-secondary">
+                Integrated Student Service &amp; Management Platform
+              </p>
+
+              <h1 className="rise-in mt-5 max-w-2xl text-5xl font-black leading-tight tracking-tight sm:text-6xl">
+                Everything on campus, <span className="text-secondary">one place.</span>
+              </h1>
+
+              <p className="rise-in mt-6 max-w-xl text-lg text-secondary">
+                Bus tracking, notices, events, room availability and student
+                services — a centralized digital campus assistant, built by
+                students, for students.
+              </p>
+            </div>
+          )}
 
           <div className="rise-in flex justify-center">
             <HeroRobot />
