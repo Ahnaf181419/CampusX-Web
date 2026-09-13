@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
@@ -10,14 +10,42 @@ const Register = () => {
     email: "",
     password: "",
   });
+
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // NEW: Used to check whether the user is already logged in
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
   const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  // NEW: Check existing login session when Register page opens
+  useEffect(() => {
+    fetch("http://localhost:5000/api/auth/me", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.user) {
+          // User is already logged in, so go to home page
+          setUser(data.user);
+          navigate("/", { replace: true });
+        } else {
+          // No active session
+          setCheckingAuth(false);
+        }
+      })
+      .catch(() => {
+        setCheckingAuth(false);
+      });
+  }, [navigate, setUser]);
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -26,15 +54,23 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        "http://localhost:5000/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Registration failed");
+
+      if (!res.ok) {
+        throw new Error(data.error || "Registration failed");
+      }
 
       setUser(data.user);
       navigate("/");
@@ -45,13 +81,27 @@ const Register = () => {
     }
   };
 
+  // NEW: Don't show registration form while checking the session
+  if (checkingAuth) {
+    return <p>Checking session...</p>;
+  }
+
   return (
     <div className="flex min-h-[calc(100vh-4rem)] w-screen items-center justify-center py-10">
       <div className="lg:border-2 lg:rounded-xl lg:border-black lg:p-20">
-        <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center">
-          <h1 className="mb-6 text-2xl font-bold">Register for CampusX</h1>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col items-center justify-center"
+        >
+          <h1 className="mb-6 text-2xl font-bold">
+            Register for CampusX
+          </h1>
 
-          {error && <p className="mb-4 text-sm font-semibold text-red-500">{error}</p>}
+          {error && (
+            <p className="mb-4 text-sm font-semibold text-red-500">
+              {error}
+            </p>
+          )}
 
           <input
             required
@@ -62,6 +112,7 @@ const Register = () => {
             type="text"
             placeholder="Full Name"
           />
+
           <input
             required
             name="studentId"
@@ -71,6 +122,7 @@ const Register = () => {
             type="text"
             placeholder="Student ID (e.g. 21-XXXXX-X)"
           />
+
           <input
             required
             name="department"
@@ -80,6 +132,7 @@ const Register = () => {
             type="text"
             placeholder="Department (e.g. CSE)"
           />
+
           <input
             required
             name="email"
@@ -89,6 +142,7 @@ const Register = () => {
             type="email"
             placeholder="Enter your email"
           />
+
           <input
             required
             name="password"
@@ -98,6 +152,7 @@ const Register = () => {
             type="password"
             placeholder="Create password"
           />
+
           <button
             type="submit"
             disabled={loading}
