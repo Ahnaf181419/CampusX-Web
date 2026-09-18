@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import LostFound from "./pages/LostFound";
 import AdminRoute from "./components/AdminRoute";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminNotices from './pages/AdminNotices';
 
 export default function App() {
   return (
@@ -47,6 +48,14 @@ export default function App() {
           element={
             <AdminRoute>
               <AdminDashboard />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/notices"
+          element={
+            <AdminRoute>
+              <AdminNotices />
             </AdminRoute>
           }
         />
