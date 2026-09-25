@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { Icon } from "../components/Icons"
+import { AuthContext } from "../context/AuthContext"
 
 const statusStyle = {
   Ongoing: "bg-primary text-white",
@@ -15,6 +16,9 @@ const emptyForm = {
 }
 
 export default function Events() {
+  const { user } = useContext(AuthContext)
+  const isAdmin = user?.role === "Admin"
+
   const [events, setEvents] = useState([])
   const [activeFilter, setActiveFilter] = useState("All")
   const [selectedEvent, setSelectedEvent] = useState(null)
@@ -128,14 +132,16 @@ export default function Events() {
               </button>
             ))}
           </div>
-          <button
-            type="button"
-            onClick={() => setShowForm(true)}
-            className="flex items-center gap-2 rounded-full bg-primary px-6 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
-          >
-            <Icon name="plus" className="h-4 w-4" />
-            Add Event
-          </button>
+          {isAdmin && (
+            <button
+              type="button"
+              onClick={() => setShowForm(true)}
+              className="flex items-center gap-2 rounded-full bg-primary px-6 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+            >
+              <Icon name="plus" className="h-4 w-4" />
+              Add Event
+            </button>
+          )}
         </div>
 
         {loading ? (
@@ -205,13 +211,15 @@ export default function Events() {
                             <Icon name="arrowRight" className="h-3.5 w-3.5" />
                           </a>
                         )}
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteEvent(event._id)}
-                          className="ml-auto rounded-lg px-2 py-1.5 text-xs font-semibold text-priority-high transition-colors hover:bg-priority-high/10"
-                        >
-                          <Icon name="trash" className="h-4 w-4" />
-                        </button>
+                        {isAdmin && (
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteEvent(event._id)}
+                            className="ml-auto rounded-lg px-2 py-1.5 text-xs font-semibold text-priority-high transition-colors hover:bg-priority-high/10"
+                          >
+                            <Icon name="trash" className="h-4 w-4" />
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -293,7 +301,7 @@ export default function Events() {
         </div>
       )}
 
-      {showForm && (
+      {isAdmin && showForm && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm"
           onClick={() => setShowForm(false)}

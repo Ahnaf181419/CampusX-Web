@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { Icon } from "../components/Icons"
+import { AuthContext } from "../context/AuthContext"
 
 const typeStyle = {
   Lost: "bg-[#E03C4B] text-white",
@@ -17,62 +18,111 @@ const emptyForm = {
 
 const dummyItems = [
   {
-    _id: "dummy-1",
+    _id: "1",
     title: "Blue Backpack",
     type: "Lost",
     location: "Library 2nd Floor",
-    date: "Sep 8, 2026",
-    description: "Lost a blue Jansport backpack near the study tables. Contains a laptop and some textbooks. Please contact me if found.",
-    contact: "student1@campus.edu",
+    date: "May 10, 2026",
+    description: "Blue JanSport backpack with laptop compartment. Contains a MacBook Pro, notebook, and water bottle. Lost near the study tables.",
+    contact: "john.doe@university.edu",
+    createdAt: "2026-05-10T10:00:00.000Z",
   },
   {
-    _id: "dummy-2",
-    title: "Black Water Bottle",
-    type: "Found",
-    location: "CS Building Room 101",
-    date: "Sep 9, 2026",
-    description: "Found a black Hydro Flask water bottle under the desk in the CS lab. It has a few stickers on it.",
-    contact: "student2@campus.edu",
-  },
-  {
-    _id: "dummy-3",
-    title: "Gold Watch",
+    _id: "2",
+    title: "iPhone 15 Pro",
     type: "Lost",
-    location: "Student Center Cafeteria",
-    date: "Sep 10, 2026",
-    description: "Lost a gold-colored Casio watch around lunchtime. It has significant sentimental value. Reward offered.",
-    contact: "student3@campus.edu",
+    location: "Cafeteria",
+    date: "May 8, 2026",
+    description: "Black iPhone 15 Pro in a clear case. Lost during lunch break. Has a cracked screen protector.",
+    contact: "+1-555-0123",
+    createdAt: "2026-05-08T12:30:00.000Z",
   },
   {
-    _id: "dummy-4",
-    title: "USB-C Charging Cable",
+    _id: "3",
+    title: "Set of Car Keys",
     type: "Found",
-    location: "Engineering Hall Lobby",
-    date: "Sep 10, 2026",
-    description: "Found a white USB-C to USB-C cable plugged into a wall outlet near the vending machines. Looks like it belongs to someone.",
-    contact: "student4@campus.edu",
+    location: "Parking Lot B",
+    date: "May 12, 2026",
+    description: "Found a set of car keys with a Toyota key fob and a few other keys on a black lanyard. Turned in to security office.",
+    contact: "security@university.edu",
+    createdAt: "2026-05-12T09:15:00.000Z",
   },
   {
-    _id: "dummy-5",
-    title: "Red Hoodie",
+    _id: "4",
+    title: "Red Umbrella",
     type: "Lost",
-    location: "Gym Locker Room B",
-    date: "Sep 7, 2026",
-    description: "Left behind a red Nike hoodie with 'PHYS ED' printed on the back. Size Medium.",
-    contact: "student5@campus.edu",
+    location: "Main Entrance",
+    date: "May 5, 2026",
+    description: "Compact red umbrella with wooden handle. Left it by the entrance during the rain.",
+    contact: "jane.smith@university.edu",
+    createdAt: "2026-05-05T08:00:00.000Z",
   },
   {
-    _id: "dummy-6",
+    _id: "5",
+    title: "Wireless Earbuds Case",
+    type: "Found",
+    location: "CS Building Lab 3",
+    date: "May 11, 2026",
+    description: "White AirPods Pro case (earbuds inside). Found on the desk in Lab 3. Available for pickup at CS department office.",
+    contact: "cs.dept@university.edu",
+    createdAt: "2026-05-11T14:20:00.000Z",
+  },
+  {
+    _id: "6",
+    title: "Student ID Card",
+    type: "Found",
+    location: "Student Center",
+    date: "May 9, 2026",
+    description: "Found a student ID card near the vending machines. Name: Alex Johnson, ID: 2024-12345. Held at Student Center front desk.",
+    contact: "student.center@university.edu",
+    createdAt: "2026-05-09T11:45:00.000Z",
+  },
+  {
+    _id: "7",
+    title: "Gray Hoodie",
+    type: "Lost",
+    location: "Gym",
+    date: "May 7, 2026",
+    description: "Nike gray hoodie, size M. Left in the locker room after workout. Has a small tear on the left sleeve.",
+    contact: "mike.wilson@university.edu",
+    createdAt: "2026-05-07T18:30:00.000Z",
+  },
+  {
+    _id: "8",
+    title: "Textbook: Calculus Early Transcendentals",
+    type: "Lost",
+    location: "Math Building Room 201",
+    date: "May 6, 2026",
+    description: "Stewart Calculus 8th edition. Hardcover with yellow sticky notes throughout. Left on the desk after class.",
+    contact: "sarah.chen@university.edu",
+    createdAt: "2026-05-06T15:00:00.000Z",
+  },
+  {
+    _id: "9",
+    title: "Water Bottle (Hydro Flask)",
+    type: "Found",
+    location: "Football Field",
+    date: "May 13, 2026",
+    description: "Stainless steel Hydro Flask, 32oz, matte black. Found on the bleachers after the match. No stickers.",
+    contact: "athletics@university.edu",
+    createdAt: "2026-05-13T16:45:00.000Z",
+  },
+  {
+    _id: "10",
     title: "Prescription Glasses",
-    type: "Found",
-    location: "Biology Building Room 204",
-    date: "Sep 11, 2026",
-    description: "Found a pair of black-framed prescription glasses on a desk after the 10am lecture. Please claim at the front office.",
-    contact: "frontoffice@campus.edu",
+    type: "Lost",
+    location: "Lecture Hall A",
+    date: "May 4, 2026",
+    description: "Black rectangular frames, thin lenses. Left on the seat during the morning lecture. Very important - needed for driving.",
+    contact: "david.kim@university.edu",
+    createdAt: "2026-05-04T10:15:00.000Z",
   },
 ]
 
 export default function LostFound() {
+  const { user } = useContext(AuthContext)
+  const isAdmin = user?.role === "Admin"
+
   const [items, setItems] = useState([])
   const [activeFilter, setActiveFilter] = useState("All")
   const [selectedItem, setSelectedItem] = useState(null)
@@ -86,7 +136,11 @@ export default function LostFound() {
       try {
         const res = await fetch("/api/lost-found")
         const data = await res.json()
-        setItems(data.length > 0 ? data : dummyItems)
+        if (data && data.length > 0) {
+          setItems(data)
+        } else {
+          setItems(dummyItems)
+        }
       } catch (error) {
         console.error("Failed to fetch items:", error)
         setItems(dummyItems)
@@ -246,13 +300,15 @@ export default function LostFound() {
                         >
                           View Details
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteItem(item._id)}
-                          className="ml-auto rounded-lg px-2 py-1.5 text-xs font-semibold text-priority-high transition-colors hover:bg-priority-high/10"
-                        >
-                          <Icon name="trash" className="h-4 w-4" />
-                        </button>
+                        {isAdmin && (
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteItem(item._id)}
+                            className="ml-auto rounded-lg px-2 py-1.5 text-xs font-semibold text-priority-high transition-colors hover:bg-priority-high/10"
+                          >
+                            <Icon name="trash" className="h-4 w-4" />
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
