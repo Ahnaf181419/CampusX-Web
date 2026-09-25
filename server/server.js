@@ -8,6 +8,7 @@ const passport = require("passport");
 // Route imports
 const busRoutes = require("./routes/busRoutes");
 const eventRoutes = require("./routes/eventRoutes");
+const roomRoutes = require("./routes/roomRoutes");
 const authRoutes = require("./routes/auth"); // Make sure this file exists from Step 4
 const adminRoutes = require("./routes/adminRoutes");
 const noticeRoutes = require("./routes/noticeRoutes");
@@ -62,6 +63,7 @@ app.get("/", (req, res) => {
 // Feature routes
 app.use("/api/buses", busRoutes);
 app.use("/api/events", eventRoutes);
+app.use("/api/rooms", roomRoutes);
 app.use("/api/auth", authRoutes); // New authentication routes
 app.use("/api/admin", adminRoutes);
 app.use("/api/notices", noticeRoutes);
