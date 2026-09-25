@@ -8,13 +8,13 @@ function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-muted/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-        <Link to="/" className="text-lg font-bold tracking-tight">
+        <Link to={user ? "/home" : "/"} className="text-lg font-bold tracking-tight">
           Campus<span className="text-secondary">X</span>
         </Link>
 
         <nav className="flex items-center gap-1.5">
           <Link
-            to="/"
+            to={user ? "/home" : "/"}
             className="rounded-lg px-3 py-2 text-sm font-medium text-primary hover:bg-surface"
           >
             Home

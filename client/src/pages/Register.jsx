@@ -30,7 +30,7 @@ const Register = () => {
         if (data.user) {
           // User is already logged in, so go to home page
           setUser(data.user);
-          navigate("/", { replace: true });
+          navigate("/home", { replace: true });
         } else {
           // No active session
           setCheckingAuth(false);
@@ -73,7 +73,7 @@ const Register = () => {
       }
 
       setUser(data.user);
-      navigate("/");
+      navigate("/home");
     } catch (err) {
       setError(err.message);
     } finally {
