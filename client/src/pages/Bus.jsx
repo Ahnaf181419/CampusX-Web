@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import { AuthContext } from "../context/AuthContext"
 import { Icon } from "../components/Icons"
 
 const cardShadow = "shadow-[0_4px_16px_rgb(22_32_50/0.09)]"
 
 export default function Bus() {
+  const { user } = useContext(AuthContext)
   const [buses, setBuses] = useState(null)
   const [loadError, setLoadError] = useState(null)
   const [selectedBusId, setSelectedBusId] = useState("padma")
@@ -238,6 +240,7 @@ export default function Bus() {
           )}
         </div>
 
+        {user?.role === "Admin" && (
         <div className={`rise-in mt-4 rounded-2xl bg-white p-5 ${cardShadow}`}>
           <div className="flex items-center justify-center gap-3">
             <Icon
@@ -288,6 +291,7 @@ export default function Bus() {
             Reset Route
           </button>
         </div>
+        )}
 
         <div className={`rise-in mt-4 rounded-2xl bg-white p-4 ${cardShadow}`}>
           <div className="flex items-center gap-4">
