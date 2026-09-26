@@ -36,9 +36,9 @@ const services = [
     icon: "package",
   },
   {
-    name: "Marketplace",
-    description: "Buy and sell within the campus community, safely.",
-    icon: "tag",
+    name: "Chatbot",
+    description: "Ask about buses, notices, events, rooms and lost & found.",
+    icon: "chat",
   },
   {
     name: "Academic Tools",

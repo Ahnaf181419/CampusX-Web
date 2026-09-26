@@ -12,6 +12,7 @@ const roomRoutes = require("./routes/roomRoutes");
 const authRoutes = require("./routes/auth"); // Make sure this file exists from Step 4
 const adminRoutes = require("./routes/adminRoutes");
 const noticeRoutes = require("./routes/noticeRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 const lostFoundRoutes = require("./routes/lostFoundRoutes");
 // Model imports
 const User = require("./models/User"); // Make sure this file exists from Step 2
@@ -68,6 +69,7 @@ app.use("/api/rooms", roomRoutes);
 app.use("/api/auth", authRoutes); // New authentication routes
 app.use("/api/admin", adminRoutes);
 app.use("/api/notices", noticeRoutes);
+app.use("/api/chat", chatRoutes);
 app.use("/api/lost-found", lostFoundRoutes);
 // Connect to MongoDB
 // family: 4 forces IPv4 — DNS64/NAT64 networks return IPv6 addresses

@@ -243,5 +243,23 @@ export function Icon({ name, className }) {
     )
   }
 
+  if (name === "chat") {
+    return (
+      <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.5 0-2.9-.4-4.1-1L3 20l1-5.4a8.5 8.5 0 1 1 17-3.1Z" />
+        <path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01" />
+      </svg>
+    )
+  }
+
+  if (name === "send") {
+    return (
+      <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M22 2 11 13" />
+        <path d="M22 2 15 22l-4-9-9-4 20-7Z" />
+      </svg>
+    )
+  }
+
   return null
 }

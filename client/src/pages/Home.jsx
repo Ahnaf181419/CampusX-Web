@@ -41,10 +41,10 @@ const features = [
     icon: "package",
   },
   {
-    path: "/marketplace",
-    name: "Marketplace",
-    description: "Buy and sell within the campus community, safely.",
-    icon: "tag",
+    path: "/chatbot",
+    name: "Chatbot",
+    description: "Ask about buses, notices, events, rooms and lost & found.",
+    icon: "chat",
   },
   {
     path: "/tools",
