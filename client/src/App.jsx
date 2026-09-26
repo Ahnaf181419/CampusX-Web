@@ -1,6 +1,5 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Placeholder from "./components/Placeholder";
 import Landing from "./pages/Landing";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -13,6 +12,7 @@ import Events from "./pages/Events";
 import Rooms from "./pages/Rooms";
 import Profile from "./pages/Profile";
 import LostFound from "./pages/LostFound";
+import Chatbot from "./pages/Chatbot";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -97,10 +97,10 @@ export default function App() {
           }
         />
         <Route
-          path="/marketplace"
+          path="/chatbot"
           element={
             <ProtectedRoute>
-              <Placeholder icon="tag" name="Marketplace" />
+              <Chatbot />
             </ProtectedRoute>
           }
         />

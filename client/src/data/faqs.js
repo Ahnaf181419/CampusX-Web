@@ -4,7 +4,7 @@ export const categories = [
   { id: "notices-events", label: "Notices & Events" },
   { id: "rooms", label: "Room Finder" },
   { id: "lost-found", label: "Lost & Found" },
-  { id: "marketplace", label: "Marketplace" },
+  { id: "chatbot", label: "Chatbot" },
   { id: "tools", label: "Academic Tools" },
   { id: "account", label: "Account & Privacy" },
 ]
@@ -14,7 +14,7 @@ export const faqs = [
     category: "getting-started",
     question: "What is CampusX?",
     answer:
-      "CampusX is a **centralized platform** that brings student services together: **bus tracking, notices, events, room availability, lost & found, marketplace and academic tools** — all in one place, built by students, for students.",
+      "CampusX is a **centralized platform** that brings student services together: **bus tracking, notices, events, room availability, lost & found, chatbot and academic tools** — all in one place, built by students, for students.",
   },
   {
     category: "getting-started",
@@ -32,7 +32,7 @@ export const faqs = [
     category: "getting-started",
     question: "Where should I start after logging in?",
     answer:
-      "The **home dashboard** greets you personally and lists all **eight services** as cards — Bus Tracking, Notices, Events, Room Finder, FAQ, Lost & Found, Marketplace and Academic Tools. Tap any card to jump straight in.",
+      "The **home dashboard** greets you personally and lists all **eight services** as cards — Bus Tracking, Notices, Events, Room Finder, FAQ, Lost & Found, Chatbot and Academic Tools. Tap any card to jump straight in.",
   },
   {
     category: "getting-started",
@@ -143,22 +143,22 @@ export const faqs = [
       "When someone posts a match for your report, connect through the listing to **arrange a handover on campus**. Always meet in a public campus spot.",
   },
   {
-    category: "marketplace",
-    question: "What can I sell on the Marketplace?",
+    category: "chatbot",
+    question: "What is the Chatbot?",
     answer:
-      "Anything useful to students — **books, calculators, gadgets, lab gear**. The audience is your campus only, which keeps listings relevant and trades local.",
+      "The **Chatbot** is an AI assistant that answers questions about campus — buses, notices, events, rooms and lost & found — using **live data from the CampusX database**.",
   },
   {
-    category: "marketplace",
-    question: "How are payments handled?",
+    category: "chatbot",
+    question: "How does the Chatbot know the answers?",
     answer:
-      "CampusX does **not process payments**. Buyers and sellers agree a price in chat and settle **face to face on campus** — the platform only connects you.",
+      "It reads the **same database** that powers Bus Tracking, Notices, Events, Room Finder and Lost & Found, so its answers always reflect the **current live data**.",
   },
   {
-    category: "marketplace",
-    question: "Is Marketplace available yet?",
+    category: "chatbot",
+    question: "The Chatbot couldn't answer my question — why?",
     answer:
-      "Marketplace is a **planned service** — the page currently shows a coming-soon placeholder while the core services (buses, notices, events, rooms) run live.",
+      "It only answers from **campus data it has access to**. For anything else, email **support@campusx.dev** and the team will help you out.",
   },
   {
     category: "tools",
