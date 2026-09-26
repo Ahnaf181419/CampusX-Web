@@ -22,6 +22,9 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
+const { co2 } = require('@tgwf/co2');
+const co2Emission = new co2({ model: 'swd' });
+
 // Middleware
 // 1. CORS configuration updated to allow cookie sharing with React
 app.use(
@@ -55,6 +58,35 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
+
+app.use((req, res, next) => {
+  let requestBytes = 
+    (req.body ? Buffer.byteLength(JSON.stringify(req.body), 'utf8') : 0) +
+    (req.query ? Buffer.byteLength(JSON.stringify(req.query), 'utf8') : 0) +
+    (req.headers ? Buffer.byteLength(JSON.stringify(req.headers), 'utf8') : 0);
+
+  let responseBytes = 0;
+  const originalWrite = res.write;
+  const originalEnd = res.end;
+
+  res.write = function (chunk, ...args) {
+    if (chunk) responseBytes += Buffer.byteLength(chunk, 'utf8');
+    return originalWrite.apply(res, [chunk, ...args]);
+  };
+
+  res.end = function (chunk, ...args) {
+    if (chunk) responseBytes += Buffer.byteLength(chunk, 'utf8');
+    const totalBytes = requestBytes + responseBytes;
+    const emissions = co2Emission.perByte(totalBytes, false);
+
+    console.log(`[CO2] ${req.method} ${req.originalUrl} - ${totalBytes} B | ${emissions.toFixed(4)} gCO2eq`);
+    return originalEnd.apply(res, [chunk, ...args]);
+  };
+
+  next();
+});
+
 // Test route
 app.get("/", (req, res) => {
   res.json({
@@ -71,6 +103,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/notices", noticeRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/lost-found", lostFoundRoutes);
+
+
 // Connect to MongoDB
 // family: 4 forces IPv4 — DNS64/NAT64 networks return IPv6 addresses
 // that break the driver's TLS handshake
