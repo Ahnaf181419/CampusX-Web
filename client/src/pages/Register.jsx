@@ -22,7 +22,7 @@ const Register = () => {
 
   // NEW: Check existing login session when Register page opens
   useEffect(() => {
-    fetch("http://localhost:5000/api/auth/me", {
+    fetch("/api/auth/me", {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -55,7 +55,7 @@ const Register = () => {
 
     try {
       const res = await fetch(
-        "http://localhost:5000/api/auth/register",
+        "/api/auth/register",
         {
           method: "POST",
           headers: {
