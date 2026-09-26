@@ -17,6 +17,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminNotices from './pages/AdminNotices';
+import CarbonFootprintDisplay from "./components/CarbonFootprintDisplay";
 
 export default function App() {
   const { pathname } = useLocation();
@@ -131,6 +132,7 @@ export default function App() {
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <CarbonFootprintDisplay />
     </div>
   );
 }
