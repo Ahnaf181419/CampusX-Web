@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Check if user has an active session cookie
-    fetch("http://localhost:5000/api/auth/me", { credentials: "include" })
+    fetch("/api/auth/me", { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         if (data.user) setUser(data.user);

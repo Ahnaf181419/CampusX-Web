@@ -16,7 +16,7 @@ const Login = () => {
 
   // NEW: Check existing login session when Login page opens
   useEffect(() => {
-    fetch("http://localhost:5000/api/auth/me", {
+    fetch("/api/auth/me", {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -41,7 +41,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
